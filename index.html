@@ -1,15 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.sound.min.js"></script>
-    <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5.serialserver@0.0.28/lib/p5.serialport.js"></script>
-	  
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maurer Rose Project</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+</head>
+<body>
+  <h1>Maurer Rose Project</h1>
+  <p>Select a version to display:</p>
+  <select id="versionSelector" onchange="loadVersion()">
+    <option value="version1.js">Version 1</option>
+    <option value="version2.js">Version 2</option>
+    <option value="version3.js">Version 3</option>
+    <option value="sketch.js">sketch</option>
+  </select>
+  <script>
+    let script;
 
-  </head>
-  <body>
-    <script src="sketch.js"></script>
-  </body>
+    function loadVersion() {
+      const version = document.getElementById("versionSelector").value;
+
+      // Remove existing sketch if there is one
+      if (script) {
+        document.body.removeChild(script);
+      }
+
+      // Load the selected version
+      script = document.createElement("script");
+      script.src = version;
+      document.body.appendChild(script);
+    }
+
+    // Load default version
+    window.onload = () => {
+      document.getElementById("versionSelector").value = "version1.js";
+      loadVersion();
+    };
+  </script>
+</body>
 </html>
