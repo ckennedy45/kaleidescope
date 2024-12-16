@@ -1,4 +1,4 @@
-let serial;
+slet serial;
 let latestData = 0; // Potentiometer value
 let smoothedData = 0;
 let smoothingFactor = 0.1;
@@ -10,7 +10,7 @@ let n = 7; // Default rose values
 let d = 71;
 let colors = []; // Store random colors for each slice
 
-function setup() {
+function version1setup() {
   createCanvas(800, 800);
   angleMode(DEGREES);
 
@@ -37,7 +37,7 @@ function gotData() {
   }
 }
 
-function draw() {
+function version1draw() {
   // Check if potentiometer value has changed significantly
   if (abs(latestData - lastRenderedValue) > threshold) {
     lastRenderedValue = latestData;
