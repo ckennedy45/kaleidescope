@@ -1,4 +1,4 @@
-hlet serial;
+let serial;
 let latestData = 0; // Potentiometer value
 let smoothedData = 0;
 let smoothingFactor = 0.1;
