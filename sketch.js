@@ -10,7 +10,7 @@ let n = 6; // Constant rose 'n' value
 let d = 1; // Starting 'd' value, controlled by potentiometer
 let colors = []; // Store colors for each slice
 
-function sketchsetup() {
+function setup() {
   createCanvas(800, 800);
   angleMode(DEGREES);
 
@@ -37,7 +37,7 @@ function gotData() {
   }
 }
 
-function sketchdraw() {
+function draw() {
   // Map potentiometer value to 'd' range [1, 360]
   d = int(map(latestData, 0, 1023, 1, 360));
 
