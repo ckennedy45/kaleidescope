@@ -22,11 +22,10 @@ function setup() {
 
   // Setup Serial
   serial = new p5.SerialPort();
-  serial.open("/dev/tty.usbmodem101"); // Update with your port name
+  serial.open("/dev/tty.usbmodem101"); 
   serial.on('data', gotData);
   serial.on('open', () => console.log("Serial Port is Open"));
 
-  // Initialize themed colors for slices
   for (let i = 0; i < numSlices; i++) {
     colors.push(colorTheme(i, numSlices));
   }
@@ -35,50 +34,42 @@ function setup() {
 function gotData() {
   let currentString = serial.readLine();
   if (currentString) {
-    // Parse potentiometer, light sensor, and button values
     let parts = currentString.split(',');
     if (parts.length === 3) {
       let potValue = int(parts[0].split(':')[1]);
       let newLightValue = int(parts[1].split(':')[1]);
       let button = int(parts[2].split(':')[1]);
 
-      // Smooth potentiometer value
       if (abs(potValue - smoothedData) > threshold) {
         smoothedData = lerp(smoothedData, potValue, smoothingFactor);
         latestData = int(smoothedData);
       }
 
-      // Update light value
       lightValue = constrain(newLightValue, 0, 1023);
 
-      // Button press toggle logic to avoid spamming
       if (button === 1 && !buttonPressed) {
         fillMode = !fillMode;
-        buttonPressed = true; // Prevent further toggling until released
+        buttonPressed = true; 
       } else if (button === 0) {
-        buttonPressed = false; // Reset button state
+        buttonPressed = false; 
       }
     }
   }
 }
 
 function draw() {
-  // Dynamically map lightValue to radius range but keep the baseline size
+  
   let expandedRadius = map(lightValue, 0, 1023, baseRadius, baseRadius * 2.5);
-  radius = max(expandedRadius, baseRadius); // Ensure radius doesn't go below baseline
+  radius = max(expandedRadius, baseRadius); 
 
-  // Map potentiometer value to 'd' range [1, 360]
   d = int(map(latestData, 0, 1023, 1, 360));
 
-  // Update rotation angle based on light value
-  let rotationSpeed = map(lightValue, 0, 1023, 0, 2); // Speed increases with light
+  let rotationSpeed = map(lightValue, 0, 1023, 0, 2); 
   rotationAngle += rotationSpeed;
 
-  // Check if potentiometer value has changed significantly
   if (abs(latestData - lastRenderedValue) > threshold) {
     lastRenderedValue = latestData;
 
-    // Update number of slices
     numSlices = int(map(latestData, 0, 1023, 6, 24));
     colors = [];
     for (let i = 0; i < numSlices; i++) {
@@ -88,17 +79,15 @@ function draw() {
 
   background(0);
   translate(width / 2, height / 2);
-  rotate(rotationAngle); // Apply global rotation to the entire kaleidoscope
+  rotate(rotationAngle); 
   let angleIncrement = 360 / numSlices;
 
-  // Draw kaleidoscope slices
   for (let i = 0; i < numSlices; i++) {
     push();
     rotate(i * angleIncrement);
     drawRose(200, 0, n, d, colors[i], 1);
     pop();
 
-    // Mirrored sector
     push();
     scale(-1, 1);
     rotate(i * angleIncrement);
@@ -106,7 +95,6 @@ function draw() {
     pop();
   }
 
-  // Add central rose
   drawCentralRose();
 }
 
@@ -116,7 +104,6 @@ function drawRose(x, y, n, d, col, scaleFactor) {
   scale(scaleFactor);
 
   if (fillMode) {
-    // Gradient fill for the rose
     noStroke();
     for (let r = radius; r > 0; r -= 5) {
       fill(hue(col), 80, map(r, 0, radius, 100, 50), 0.8);
@@ -132,7 +119,6 @@ function drawRose(x, y, n, d, col, scaleFactor) {
     }
   }
 
-  // Overlay the Maurer Rose lines
   stroke(hue(col), 100, 100, 0.8);
   strokeWeight(1.5);
   noFill();
@@ -169,7 +155,6 @@ function drawCentralRose() {
     }
   }
 
-  // Overlay central Maurer Rose lines
   stroke(60, 100, 100, 0.8);
   strokeWeight(1.5);
   noFill();
